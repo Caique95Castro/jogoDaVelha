@@ -1,14 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author heito
- */
-
-    
 import java.util.Random;
 import java.util.Scanner;
 
@@ -19,9 +9,11 @@ import java.util.Scanner;
  * <p>
  * *
  * <p>
- * Caique de Oliveira Castro *
+ * Caique de Oliveira Castro
+ *
  * <p>
- * Heitor Pereira de Lucena *
+ * Heitor Pereira de Lucena
+ *
  * <p>
  * Willian Vieira de Sousa *
  */
@@ -32,8 +24,8 @@ import java.util.Scanner;
  * *
  */
 /*     Projeto Semestral I                                **/
-/*                                                        **/
-/*                                                        **/
+ /*                                                        **/
+ /*                                                        **/
 /**
  * Caique de Oliveira Castro *
  */
@@ -44,10 +36,9 @@ import java.util.Scanner;
  * Willian Vieira de Sousa *
  */
 /*                                                        **/
-/*    Data de Entrega:                                    **/
-/*     27/05/2024                                         **/
-/*                                                        **/
-
+ /*    Data de Entrega:                                    **/
+ /*     27/05/2024                                         **/
+ /*                                                        **/
 /**
  * ********************************************************
  */
@@ -56,17 +47,15 @@ public class NewClass {
     public static char[][] tabuleiro;
     public static char jogadorAtual;
     public static char player1;
-    public static char jogadorComputador;
     public static char player2;
-    public static char pontosJogador1;
-    public static char pontosJogador2;
-
+    public static int pontosJogador1;
+    public static int pontosJogador2;
 
     public static void menuPrincipal(Scanner input) {
 
         boolean taCerto = false;
         do {
-            exibirMenu(input);
+            exibirMenu();
             int opc = input.nextInt();
 
             switch (opc) {
@@ -85,7 +74,7 @@ public class NewClass {
         } while (!taCerto);
     }
 
-    public static void exibirMenu(Scanner input) {
+    public static void exibirMenu() {
         System.out.println("");
         System.out.println("Seja bem-vindo(a) ao \n");
 
@@ -109,19 +98,16 @@ public class NewClass {
 
             switch (escolha) {
                 case 1:
-                    imprimirTabuleiro();
-                    jogadorXjogador(input);
                     inicializarTabuleiro();
+                    jogadorXjogador(input);
                     break;
                 case 2:
-                    imprimirTabuleiro();
-                    modoFacil(input);
                     inicializarTabuleiro();
+                    modoFacil(input);
                     break;
                 case 3:
-                    imprimirTabuleiro();
-                    modoDificil(input);
                     inicializarTabuleiro();
+                    modoDificil(input);
                     break;
                 case 4:
                     sairJogo(input);
@@ -148,8 +134,18 @@ public class NewClass {
 
     }
 
-    //responsável por inicializar o tabuleiro
+//responsável por inicializar o tabuleiro
     public static void inicializarTabuleiro() {
+        tabuleiro = new char[][]{
+            {' ', ' ', ' '},
+            {' ', ' ', ' '},
+            {' ', ' ', ' '}
+        };
+        jogadorAtual = ' ';
+    }
+
+    // responsável por imprimir o tabuleiro
+    public static void imprimirTabuleiro() {
         System.out.println("-------------");
         for (int i = 0; i < 3; i++) {
             System.out.print("| ");
@@ -161,15 +157,6 @@ public class NewClass {
         }
     }
 
-    // responsável por imprimir o tabuleiro
-    public static void imprimirTabuleiro() {
-        tabuleiro = new char[][]{
-                {' ', ' ', ' '},
-                {' ', ' ', ' '},
-                {' ', ' ', ' '}
-        };
-    }
-
     public static void escolhaXO(Scanner input) {
 
         boolean certo = false;
@@ -177,15 +164,13 @@ public class NewClass {
             System.out.println("Escolha seu símbolo (X ou O): ");
             String dig = input.next();
 
-            switch (dig) {
+            switch (dig.toUpperCase()) {
                 case "X":
-                case "x":
                     player1 = 'X';
                     player2 = 'O';
                     certo = true;
                     break;
                 case "O":
-                case "o":
                     player1 = 'O';
                     player2 = 'X';
                     certo = true;
@@ -201,45 +186,30 @@ public class NewClass {
         System.out.println("jogador 2 você é: " + player2);
     }
 
-    public static int leiaCoordenadaLinha() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite a linha (0, 1 ou 2):");
-        return scanner.nextInt();
+    public static int leiaCoordenadaLinha(Scanner scanner) {
+        System.out.println("Digite a linha (1, 2 ou 3):");
+        int linha = scanner.nextInt();
+        return linha -1;
     }
 
-    public static int leiaCoordenadaColuna() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite a coluna (0, 1 ou 2):");
-        return scanner.nextInt();
+    public static int leiaCoordenadaColuna(Scanner scanner) {
+        System.out.println("Digite a coluna (1, 2 ou 3):");
+        int coluna = scanner.nextInt();
+        return coluna -1;
     }
 
     public static boolean posicaoValida(int linha, int coluna) {
-        return linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == '-';
+        return linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ';
     }
 
-
     public static void jogada(int linha, int coluna) {
-        boolean jogadaValida = false;
-
-        Scanner input = new Scanner(System.in);
-        while (!jogadaValida) {
-            System.out.println("Jogador " + jogadorAtual + ", faça sua jogada! (linha e coluna de 1 a 3): ");
-            linha = input.nextInt() - 1;
-            coluna = input.nextInt() - 1;
-
-            if (linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ') {
-                tabuleiro[linha][coluna] = jogadorAtual;
-                jogadaValida = true;
-            } else {
-                System.out.println("Jogada inválida, tente novamente.");
-            }
-        }
+        tabuleiro[linha][coluna] = jogadorAtual;
     }
 
     public static boolean verificaVelha() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (tabuleiro[i][j] == '-') {
+                if (tabuleiro[i][j] == ' ') {
                     return false;
                 }
             }
@@ -249,45 +219,23 @@ public class NewClass {
 
     public static char verificaVencedor() {
         for (int i = 0; i < 3; i++) {
-            if (tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != '-') {
+            if (tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != ' ') {
                 return tabuleiro[i][0];
             }
-            if (tabuleiro[0][i] == tabuleiro[1][i] && tabuleiro[1][i] == tabuleiro[2][i] && tabuleiro[0][i] != '-') {
+            if (tabuleiro[0][i] == tabuleiro[1][i] && tabuleiro[1][i] == tabuleiro[2][i] && tabuleiro[0][i] != ' ') {
                 return tabuleiro[0][i];
             }
         }
-        if (tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != '-') {
+        if (tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != ' ') {
             return tabuleiro[0][0];
         }
-        if (tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != '-') {
+        if (tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != ' ') {
             return tabuleiro[0][2];
         }
-        return '-';
+        return ' ';
     }
 
-
-    public static int pontosJogo(int pontosJogador1, int pontosJogador2 ) {
-
-        int pontosJogo = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (tabuleiro[i][j] == '-') {
-                    pontosJogador1++;
-                }
-            }
-        }
-        int pontosJogo1 = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (tabuleiro[i][j] == '-') {
-                    pontosJogador2++;
-                }
-            }
-        }
-        return pontosJogo;
-    }
-
-
+    
 
     public static void jogadorXjogador(Scanner input) {
 
@@ -296,16 +244,16 @@ public class NewClass {
         System.out.println("JOGADOR X JOGADOR");
         escolhaXO(input);
 
-        char vencedor = '-';
-        while (vencedor == '-' && !verificaVelha()) {
+        char vencedor = ' ';
+        while (vencedor == ' ' && !verificaVelha()) {
             imprimirTabuleiro();
             System.out.println("Vez do jogador " + jogadorAtual);
-            int linha = leiaCoordenadaLinha();
-            int coluna = leiaCoordenadaColuna();
+            int linha = leiaCoordenadaLinha(input);
+            int coluna = leiaCoordenadaColuna(input);
             if (posicaoValida(linha, coluna)) {
                 jogada(linha, coluna);
                 vencedor = verificaVencedor();
-                if (vencedor == '-') {
+                if (vencedor == ' ') {
                     jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
                 }
             } else {
@@ -313,9 +261,9 @@ public class NewClass {
             }
         }
         imprimirTabuleiro();
-        if (vencedor != '-') {
+        if (vencedor != ' ') {
             System.out.println("Jogador " + vencedor + " venceu!");
-            if (vencedor == 'X') {
+            if (vencedor == player1) {
                 pontosJogador1++;
             } else {
                 pontosJogador2++;
@@ -331,7 +279,6 @@ public class NewClass {
         System.out.println("Jogador 1 (X): " + pontosJogador1);
         System.out.println("Jogador 2 (O): " + pontosJogador2);
     }
-
 
     public static void modoFacil(Scanner input) {
         System.out.println("MODO FACIL");
@@ -357,17 +304,8 @@ public class NewClass {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        imprimeMenuPrincipal(input);
-
-
-
+        inicializarTabuleiro();
+        menuPrincipal(input);
+        input.close();
     }
 }
-
-
-
-
-
-    
-    
-
