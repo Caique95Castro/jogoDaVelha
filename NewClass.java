@@ -5,43 +5,21 @@ import java.util.Scanner;
 /**
  * @author caique.ocastro
  * <p>
- * ********************************************************
- * <p>
- * *
- * <p>
- * Caique de Oliveira Castro
- *
- * <p>
- * Heitor Pereira de Lucena
- *
- * <p>
- * Willian Vieira de Sousa *
- */
-/**
- * ********************************************************
- */
-/**
- * *
- */
+ * 
+/***********************************************************/
+/**                                                       **/
 /*     Projeto Semestral I                                **/
- /*                                                        **/
- /*                                                        **/
-/**
- * Caique de Oliveira Castro *
- */
-/**
- * Heitor Pereira de Lucena *
- */
-/**
- * Willian Vieira de Sousa *
- */
 /*                                                        **/
- /*    Data de Entrega:                                    **/
- /*     27/05/2024                                         **/
- /*                                                        **/
-/**
- * ********************************************************
- */
+/*                                                        **/
+/**    Caique de Oliveira Castro                          **/
+/**    Heitor Pereira de Lucena                           **/
+
+/**    Willian Vieira de Sousa                            **/
+/*                                                        **/
+/*    Data de Entrega:                                    **/
+/*     27/05/2024                                         **/
+/*                                                        **/
+/***********************************************************/
 public class NewClass {
 
     public static char[][] tabuleiro;
@@ -157,7 +135,7 @@ public class NewClass {
         }
     }
 
-    public static void escolhaXO(Scanner input) {
+    public static void jogadaUsuario(Scanner input) {
 
         boolean certo = false;
         do {
@@ -219,19 +197,23 @@ public class NewClass {
 
     public static char verificaVencedor() {
         for (int i = 0; i < 3; i++) {
+             // Verifica as linhas
             if (tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != ' ') {
                 return tabuleiro[i][0];
             }
+            // Verifica as colunas
             if (tabuleiro[0][i] == tabuleiro[1][i] && tabuleiro[1][i] == tabuleiro[2][i] && tabuleiro[0][i] != ' ') {
                 return tabuleiro[0][i];
             }
         }
+        // Verifica diagonais
         if (tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != ' ') {
             return tabuleiro[0][0];
         }
         if (tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != ' ') {
             return tabuleiro[0][2];
         }
+        // Se não encontrou vencedor, retorna "espaço"
         return ' ';
     }
 
@@ -239,10 +221,8 @@ public class NewClass {
 
     public static void jogadorXjogador(Scanner input) {
 
-        boolean jogoAtivo = true;
-
         System.out.println("JOGADOR X JOGADOR");
-        escolhaXO(input);
+        jogadaUsuario(input);
 
         char vencedor = ' ';
         while (vencedor == ' ' && !verificaVelha()) {
@@ -283,17 +263,31 @@ public class NewClass {
     public static void modoFacil(Scanner input) {
         System.out.println("MODO FACIL");
         Random jogadaAleatoria = new Random(3);
-        escolhaXO(input);
+        jogadaUsuario(input);
         imprimirTabuleiro();
+        jogaMaquinaFacil();
+        imprimePontuacao();
 
+    }
+    public static void jogaMaquinaFacil() {
+        Random random = new Random();
+        int linha, coluna;
+        do {
+            linha = random.nextInt(3);
+            coluna = random.nextInt(3);
+        } while (!posicaoValida(linha, coluna));
+        System.out.println("A máquina jogou na linha " + (linha + 1) + " e coluna " + (coluna + 1));
+        jogada(linha, coluna);
     }
 
     public static void modoDificil(Scanner input) {
         System.out.println("MODO DIFICIL");
-        escolhaXO(input);
+        jogadaUsuario(input);
         imprimirTabuleiro();
+        imprimePontuacao();
 
     }
+   
 
     public static void sairJogo(Scanner input) {
         System.out.println("\n--------");
