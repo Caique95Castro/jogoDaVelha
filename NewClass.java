@@ -5,23 +5,34 @@ import java.util.Scanner;
 /**
  * @author caique.ocastro
  * <p>
- * 
-/***********************************************************/
-/**                                                       **/
+ *
+ * /**********************************************************
+ */
+/**
+ * *
+ */
 /*     Projeto Semestral I                                **/
+ /*                                                        **/
+ /*                                                        **/
+/**
+ * Caique de Oliveira Castro *
+ */
+/**
+ * Heitor Pereira de Lucena *
+ */
+/**
+ * Willian Vieira de Sousa *
+ */
 /*                                                        **/
-/*                                                        **/
-/**    Caique de Oliveira Castro                          **/
-/**    Heitor Pereira de Lucena                           **/
-
-/**    Willian Vieira de Sousa                            **/
-/*                                                        **/
-/*    Data de Entrega:                                    **/
-/*     27/05/2024                                         **/
-/*                                                        **/
-/***********************************************************/
+ /*    Data de Entrega:                                    **/
+ /*     27/05/2024                                         **/
+ /*                                                        **/
+/**
+ * ********************************************************
+ */
 public class NewClass {
 
+    // Declaração de variáveis globais
     public static char[][] tabuleiro;
     public static char jogadorAtual;
     public static char player1;
@@ -29,6 +40,7 @@ public class NewClass {
     public static int pontosJogador1;
     public static int pontosJogador2;
 
+    // Exibe o primeiro menu do jogo e lida com a escolha do jogar ou sair.    
     public static void menuPrincipal(Scanner input) {
 
         boolean taCerto = false;
@@ -52,6 +64,7 @@ public class NewClass {
         } while (!taCerto);
     }
 
+    // Exibe o menu inicial do jogo
     public static void exibirMenu() {
         System.out.println("");
         System.out.println("Seja bem-vindo(a) ao \n");
@@ -67,6 +80,8 @@ public class NewClass {
         System.out.println("Digite uma opção para prosseguir: ");
     }
 
+    // Exibe o menu principal do jogo e lida com a escolha do usuário
+    // e de escolha de modos de jogo
     public static void imprimeMenuPrincipal(Scanner input) {
 
         boolean taCerto = false;
@@ -77,7 +92,7 @@ public class NewClass {
             switch (escolha) {
                 case 1:
                     inicializarTabuleiro();
-                    jogadorXjogador(input);
+                    modoJogador(input);
                     break;
                 case 2:
                     inicializarTabuleiro();
@@ -99,6 +114,7 @@ public class NewClass {
         } while (!taCerto);
     }
 
+    // Exibe o painel com os modos de jogo
     public static void exibirPainel(Scanner input) {
 
         // MENU
@@ -112,7 +128,7 @@ public class NewClass {
 
     }
 
-//responsável por inicializar o tabuleiro
+    //responsável por inicializar o tabuleiro
     public static void inicializarTabuleiro() {
         tabuleiro = new char[][]{
             {' ', ' ', ' '},
@@ -125,16 +141,17 @@ public class NewClass {
     // responsável por imprimir o tabuleiro
     public static void imprimirTabuleiro() {
         System.out.println("-------------");
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) { // Itera sobre as linhas do tabuleiro
             System.out.print("| ");
-            for (int j = 0; j < 3; j++) {
-                System.out.print(tabuleiro[i][j] + " | ");
+            for (int j = 0; j < 3; j++) { // Itera sobre as colunas do tabuleiro
+                System.out.print(tabuleiro[i][j] + " | "); // Imprime o conteúdo da célula seguido por " | "
             }
-            System.out.println();
-            System.out.println("-------------");
+            System.out.println(); // Pula para a próxima linha após imprimir uma linha do tabuleiro
+            System.out.println("-------------"); // Imprime a linha separadora entre as linhas do tabuleiro
         }
     }
 
+    // Solicita ao usuário a escolha de seu símbolo (X ou O)
     public static void jogadaUsuario(Scanner input) {
 
         boolean certo = false;
@@ -164,83 +181,101 @@ public class NewClass {
         System.out.println("jogador 2 você é: " + player2);
     }
 
+    // Lê a coordenada da linha fornecida pelo usuário (1 a 3) e ajusta para o índice do array (0 a 2)
     public static int leiaCoordenadaLinha(Scanner scanner) {
         System.out.println("Digite a linha (1, 2 ou 3):");
         int linha = scanner.nextInt();
-        return linha -1;
+        return linha - 1;
     }
 
+    // Lê a coordenada da coluna fornecida pelo usuário (1 a 3) e ajusta para o índice do array (0 a 2)
     public static int leiaCoordenadaColuna(Scanner scanner) {
         System.out.println("Digite a coluna (1, 2 ou 3):");
         int coluna = scanner.nextInt();
-        return coluna -1;
+        return coluna - 1;
     }
 
+    // Verifica se a posição fornecida é válida e está vazia
     public static boolean posicaoValida(int linha, int coluna) {
         return linha >= 0 && linha < 3 && coluna >= 0 && coluna < 3 && tabuleiro[linha][coluna] == ' ';
     }
 
-    public static void jogada(int linha, int coluna) {
+    // Marca a jogada no tabuleiro
+    public static void jogar(int linha, int coluna) {
         tabuleiro[linha][coluna] = jogadorAtual;
     }
 
+    // Verifica se o tabuleiro está cheio, indicando um empate
+    /* Essa função verifica se o tabuleiro está completamente preenchido, 
+    indicando um empate (velha). Ela percorre todas as posições do tabuleiro. 
+    Se encontrar uma posição vazia (' '), retorna false. Caso contrário, retorna true, 
+    indicando que o tabuleiro está cheio */
     public static boolean verificaVelha() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (tabuleiro[i][j] == ' ') {
-                    return false;
+        for (int i = 0; i < 3; i++) { // Itera sobre as linhas do tabuleiro
+            for (int j = 0; j < 3; j++) { // Itera sobre as colunas do tabuleiro
+                if (tabuleiro[i][j] == ' ') { // Verifica se a posição atual está vazia
+                    return false; // Se houver pelo menos uma posição vazia, não é velha (empate)
                 }
             }
         }
-        return true;
+        return true; // Se não houver posições vazias, é velha (empate)
     }
 
+    // Verifica se há um vencedor no jogo
+    /* Essa função verifica se há um vencedor no jogo. Ela verifica cada linha, 
+    coluna e as duas diagonais do tabuleiro para ver se todos os elementos são iguais (e não vazios). 
+    Se encontrar uma linha, coluna ou diagonal com todos os mesmos símbolos (X ou O), retorna o símbolo do 
+    vencedor. Se não encontrar nenhum vencedor, retorna um espaço (' '), indicando que ainda não há vencedor. */
     public static char verificaVencedor() {
         for (int i = 0; i < 3; i++) {
-             // Verifica as linhas
+            // Verifica as linhas
             if (tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != ' ') {
-                return tabuleiro[i][0];
+                return tabuleiro[i][0]; // Retorna o símbolo do vencedor na linha
             }
             // Verifica as colunas
             if (tabuleiro[0][i] == tabuleiro[1][i] && tabuleiro[1][i] == tabuleiro[2][i] && tabuleiro[0][i] != ' ') {
-                return tabuleiro[0][i];
+                return tabuleiro[0][i]; // Retorna o símbolo do vencedor na coluna
             }
         }
         // Verifica diagonais
         if (tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != ' ') {
-            return tabuleiro[0][0];
+            return tabuleiro[0][0]; // Retorna o símbolo do vencedor na diagonal principal
         }
         if (tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != ' ') {
-            return tabuleiro[0][2];
+            return tabuleiro[0][2]; // Retorna o símbolo do vencedor na diagonal secundária
         }
         // Se não encontrou vencedor, retorna "espaço"
         return ' ';
     }
 
-    
-
-    public static void jogadorXjogador(Scanner input) {
+    // Modo de jogo Jogador vs Jogador
+    /* Essa função gerencia o modo de jogo jogador versus jogador. Solicita aos jogadores que 
+    escolham seus símbolos, e em seguida, alterna as jogadas entre os dois jogadores até que 
+    haja um vencedor ou o tabuleiro fique cheio (empate). A cada jogada, verifica se a posição é válida
+     e atualiza o tabuleiro. Após cada jogada, verifica se há um vencedor. Quando o jogo termina, imprime 
+     o resultado e a pontuação atual. */
+    public static void modoJogador(Scanner input) {
 
         System.out.println("JOGADOR X JOGADOR");
-        jogadaUsuario(input);
+        jogadaUsuario(input); // Solicita aos jogadores que escolham seus símbolos
 
         char vencedor = ' ';
-        while (vencedor == ' ' && !verificaVelha()) {
-            imprimirTabuleiro();
+        while (vencedor == ' ' && !verificaVelha()) { // Continua enquanto não houver vencedor e o tabuleiro não estiver cheio
+            imprimirTabuleiro(); // Imprime o tabuleiro atual
             System.out.println("Vez do jogador " + jogadorAtual);
-            int linha = leiaCoordenadaLinha(input);
-            int coluna = leiaCoordenadaColuna(input);
-            if (posicaoValida(linha, coluna)) {
-                jogada(linha, coluna);
-                vencedor = verificaVencedor();
+            int linha = leiaCoordenadaLinha(input); // Lê a coordenada da linha
+            int coluna = leiaCoordenadaColuna(input); // Lê a coordenada da coluna
+            if (posicaoValida(linha, coluna)) { // Verifica se a posição é válida
+                jogar(linha, coluna);  // Marca a jogada no tabuleiro
+                vencedor = verificaVencedor(); // Verifica se há um vencedor
                 if (vencedor == ' ') {
-                    jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
+                    jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X'; // Alterna o jogador atual
                 }
             } else {
                 System.out.println("Posição inválida! Tente novamente.");
             }
         }
-        imprimirTabuleiro();
+        imprimirTabuleiro(); // Imprime o tabuleiro final
         if (vencedor != ' ') {
             System.out.println("Jogador " + vencedor + " venceu!");
             if (vencedor == player1) {
@@ -251,35 +286,86 @@ public class NewClass {
         } else {
             System.out.println("Empate!");
         }
-        imprimePontuacao();
+        imprimePontuacao(); // Imprime a pontuação atual
     }
 
+    // Imprime a pontuação atual dos jogadores
     public static void imprimePontuacao() {
         System.out.println("Pontuação:");
         System.out.println("Jogador 1 (X): " + pontosJogador1);
         System.out.println("Jogador 2 (O): " + pontosJogador2);
     }
 
+    // Modo de jogo Fácil contra a máquina
+    /* Essa função gerencia o modo de jogo fácil contra a máquina. Solicita aos jogadores 
+    que escolham seus símbolos, e em seguida, alterna as jogadas entre o jogador e a máquina 
+    até que haja um vencedor ou o tabuleiro fique cheio (empate). A cada jogada do jogador, 
+    verifica se a posição é válida e atualiza o tabuleiro. A jogada da máquina é feita de 
+    forma aleatória. Após cada jogada, verifica se há um vencedor. Quando o jogo termina, 
+    imprime o resultado e a pontuação atual. */
     public static void modoFacil(Scanner input) {
-        System.out.println("MODO FACIL");
-        Random jogadaAleatoria = new Random(3);
-        jogadaUsuario(input);
-        imprimirTabuleiro();
-        jogaMaquinaFacil();
-        imprimePontuacao();
 
+        System.out.println("MODO FACIL");
+        jogadaUsuario(input); // Solicita aos jogadores que escolham seus símbolos
+
+        char vencedor = ' ';
+
+        while (vencedor == ' ' && !verificaVelha()) { // Continua enquanto não houver vencedor e o tabuleiro não estiver cheio
+            imprimirTabuleiro(); // Imprime o tabuleiro atual
+            if (jogadorAtual == player1) {
+                System.out.println("Sua vez! (Jogador " + player1 + ")");
+                int linha = leiaCoordenadaLinha(input); // Lê a coordenada da linha
+                int coluna = leiaCoordenadaColuna(input); // Lê a coordenada da coluna
+                if (posicaoValida(linha, coluna)) { // Verifica se a posição é válida
+                    jogar(linha, coluna); // Marca a jogada no tabuleiro
+                    vencedor = verificaVencedor(); // Verifica se há um vencedor
+                    if (vencedor == ' ') {
+                        jogadorAtual = player2; // Alterna para a máquina
+                    }
+                } else {
+                    System.out.println("Posição inválida! Tente novamente.");
+                }
+            } else {
+                System.out.println("Vez da Máquina (Jogador " + player2 + ")");
+                jogadaMaquinaFacil(); // Realiza uma jogada aleatória para a máquina
+                vencedor = verificaVencedor(); // Verifica se há um vencedor
+                if (vencedor == ' ') {
+                    jogadorAtual = player1; // Alterna para o jogador
+                }
+            }
+        }
+        imprimirTabuleiro(); // Imprime o tabuleiro final
+        if (vencedor != ' ') {
+            System.out.println("Jogador " + vencedor + " venceu!");
+            if (vencedor == player1) {
+                pontosJogador1++;
+            } else {
+                pontosJogador2++;
+            }
+        } else {
+            System.out.println("Empate!");
+        }
+        imprimePontuacao(); // Imprime a pontuação atual
     }
-    public static void jogaMaquinaFacil() {
-        Random random = new Random();
+
+    // Realiza uma jogada aleatória para a máquina no modo fácil
+    /* ssa função realiza uma jogada aleatória para a máquina no modo 
+    fácil. Utiliza a classe Random para gerar números aleatórios para as 
+    coordenadas da linha e coluna. Verifica se a posição gerada é válida (não ocupada).
+     Se a posição for válida, marca a jogada no tabuleiro. Caso contrário, continua 
+     gerando novas coordenadas até encontrar uma posição válida. */
+    public static void jogadaMaquinaFacil() {
+        Random jogadaAleatoria = new Random(); // Cria um objeto Random para gerar jogadas aleatórias
         int linha, coluna;
         do {
-            linha = random.nextInt(3);
-            coluna = random.nextInt(3);
-        } while (!posicaoValida(linha, coluna));
+            linha = jogadaAleatoria.nextInt(3); // Gera um número aleatório entre 0 e 2 para a linha
+            coluna = jogadaAleatoria.nextInt(3); // Gera um número aleatório entre 0 e 2 para a coluna
+        } while (!posicaoValida(linha, coluna)); // Continua gerando jogadas até encontrar uma posição válida
         System.out.println("A máquina jogou na linha " + (linha + 1) + " e coluna " + (coluna + 1));
-        jogada(linha, coluna);
+        jogar(linha, coluna); // Marca a jogada no tabuleiro
     }
 
+    // Modo de jogo Difícil contra a máquina (incompleto)
     public static void modoDificil(Scanner input) {
         System.out.println("MODO DIFICIL");
         jogadaUsuario(input);
@@ -287,8 +373,8 @@ public class NewClass {
         imprimePontuacao();
 
     }
-   
 
+    // Exibe a mensagem de saída do jogo
     public static void sairJogo(Scanner input) {
         System.out.println("\n--------");
         System.out.println("| SAIR |");
@@ -296,6 +382,7 @@ public class NewClass {
         System.out.println(" Você saiu do Jogo!");
     }
 
+    // Função principal do jogo, inicializa o tabuleiro e exibe o menu principal
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         inicializarTabuleiro();
