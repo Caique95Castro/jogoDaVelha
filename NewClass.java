@@ -33,12 +33,12 @@ import java.util.Scanner;
 public class NewClass {
 
     // Declaração de variáveis globais
-    public static char[][] tabuleiro;
-    public static char jogadorAtual;
-    public static char player1;
-    public static char player2;
-    public static int pontosJogador1;
-    public static int pontosJogador2;
+    public static char[][] tabuleiro; // Matriz que representa o tabuleiro do jogo
+    public static char jogadorAtual; // Armazena o jogador atual ('X' ou 'O')
+    public static char player1; // jogador 1
+    public static char player2; // jogador 2
+    public static int pontosJogador1; // Pontuação do jogador 1
+    public static int pontosJogador2; // Pontuação do jogador 2
 
     // Exibe o primeiro menu do jogo e lida com a escolha do jogar ou sair.    
     public static void menuPrincipal(Scanner input) {
@@ -91,20 +91,20 @@ public class NewClass {
 
             switch (escolha) {
                 case 1:
-                    inicializarTabuleiro();
-                    modoJogador(input);
+                    inicializarTabuleiro(); // Arruma o tabuleiro para um novo jogo
+                    modoJogador(input); // Inicia o modo Jogador VS Jogador
                     break;
                 case 2:
-                    inicializarTabuleiro();
-                    modoFacil(input);
+                    inicializarTabuleiro(); // Arruma o tabuleiro para um novo jogo
+                    modoFacil(input); // Inicia o modo Jogador VS Máquina (Fácil)
                     break;
                 case 3:
-                    inicializarTabuleiro();
-                    modoDificil(input);
+                    inicializarTabuleiro(); // Arruma o tabuleiro para um novo jogo
+                    modoDificil(input); // Inicia o modo Jogador VS Máquina (Difícil)
                     break;
                 case 4:
-                    sairJogo(input);
-                    taCerto = true;
+                    sairJogo(input); // Sai do jogo
+                    taCerto = true; // Termina o loop
                     break;
                 default:
                     System.out.println("Opção inválida, por favor digite uma opção válida!");
@@ -367,13 +367,103 @@ public class NewClass {
 
     // Modo de jogo Difícil contra a máquina (incompleto)
     public static void modoDificil(Scanner input) {
-        System.out.println("MODO DIFICIL");
-        jogadaUsuario(input);
-        imprimirTabuleiro();
-        imprimePontuacao();
+        
+        System.out.println("MODO DIFICIL"); // Exibe a mensagem de início do modo difícil
+        jogadaUsuario(input); // Permite ao jogador escolher seu símbolo (X ou O)
+
+        char vencedor = ' ';
+
+        while (vencedor == ' ' && !verificaVelha()) { // Continua jogando enquanto não há vencedor e o tabuleiro não está cheio
+            imprimirTabuleiro(); // Imprime o estado atual do tabuleiro
+            if (jogadorAtual == player1) { // Se for a vez do jogador
+                System.out.println("Sua vez! (Jogador " + player1 + ")");
+                int linha = leiaCoordenadaLinha(input);  // Lê a linha escolhida pelo jogador
+                int coluna = leiaCoordenadaColuna(input); // Lê a coluna escolhida pelo jogador
+                if (posicaoValida(linha, coluna)) { // Verifica se a posição escolhida é válida
+                    jogar(linha, coluna);  // Marca a jogada no tabuleiro
+                    vencedor = verificaVencedor(); // Verifica se há um vencedor após a jogada
+                    if (vencedor == ' ') {
+                        jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X'; // Alterna para a vez da máquina
+                    }
+                } else {
+                    System.out.println("Posição inválida! Tente novamente.");
+                }
+            } else { // Se for a vez da máquina
+                jogadaMaquinaDificil();  // Executa a jogada da máquina
+                vencedor = verificaVencedor(); // Verifica se há um vencedor após a jogada
+                if (vencedor == ' ') {
+                    jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X'; // Alterna para a vez do jogador
+                }
+            }
+        }
+        imprimirTabuleiro(); // Imprime o tabuleiro final após o fim do jogo
+        if (vencedor != ' ') { // Verifica e exibe o resultado do jogo
+            System.out.println("Jogador " + vencedor + " venceu!");
+            if (vencedor == player1) {
+                pontosJogador1++; // Incrementa a pontuação do jogador 1 se ele venceu
+            } else {
+                pontosJogador2++; // Incrementa a pontuação do jogador 2 se ele venceu
+            }
+        } else {
+            System.out.println("Empate!"); // Exibe mensagem de empate se não houve vencedor
+        }
+        imprimePontuacao(); // Imprime a pontuação atual dos jogadores
 
     }
+    // Função para implementar a jogada difícil da máquina
+    public static void jogadaMaquinaDificil() {
+        // Primeiro, verificar se a máquina pode vencer na próxima jogada
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tabuleiro[i][j] == ' ') {
+                    tabuleiro[i][j] = jogadorAtual;
+                    if (verificaVencedor() == jogadorAtual) {
+                        return;
+                    }
+                    tabuleiro[i][j] = ' ';
+                }
+            }
+        }
+        // Em seguida, verificar se o jogador 'Humano' pode vencer na próxima jogada, e bloquear essa jogada
+        char oponente = (jogadorAtual == 'X') ? 'O' : 'X';  // Determina o símbolo do oponente
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tabuleiro[i][j] == ' ') { // Verifica todas as posições vazias
+                    tabuleiro[i][j] = oponente; // Temporariamente marca a posição como a jogada da máquina
+                    if (verificaVencedor() == oponente) { // Verifica se esta jogada leva à vitória
+                        tabuleiro[i][j] = jogadorAtual; // Se a máquina pode vencer, finaliza a jogada
+                        return; // Finaliza a jogada
+                    }
+                    tabuleiro[i][j] = ' '; // Reverte a jogada temporária
+                }
+            }
+        }
 
+        // Tenta ocupar o centro, se estiver vazio
+        if (tabuleiro[1][1] == ' ') {
+            tabuleiro[1][1] = jogadorAtual; // Marca o centro se estiver vazio
+            return;
+        }
+
+        // Tentar ocupar um dos cantos, se estiver vazio
+        int[][] cantos = {{0, 0}, {0, 2}, {2, 0}, {2, 2}}; // Define as coordenadas dos cantos
+        for (int[] canto : cantos) {
+            if (tabuleiro[canto[0]][canto[1]] == ' ') {
+                tabuleiro[canto[0]][canto[1]] = jogadorAtual; // Marca um canto se estiver vazio
+                return;
+            }
+        }
+
+        // Tentar ocupar qualquer outra posição
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tabuleiro[i][j] == ' ') {
+                    tabuleiro[i][j] = jogadorAtual; // Marca a primeira posição vazia encontrada
+                    return;
+                }
+            }
+        }
+    }
     // Exibe a mensagem de saída do jogo
     public static void sairJogo(Scanner input) {
         System.out.println("\n--------");
